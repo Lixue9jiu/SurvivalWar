@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IBlockRenderer
 {
-    void GenerateTerrainVertices(int x, int y, int z, Chunk chunk, ChunkMesh mesh);
+    void GenerateTerrainVertices(int x, int y, int z, TerrainManager terrain, ChunkMesh mesh);
 }

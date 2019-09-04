@@ -4,12 +4,25 @@ using UnityEngine;
 
 public class Chunk
 {
-    const int CHUNK_X_SHIFT = 4;
-    const int CHUNK_Y_SHIFT = 7;
-    const int CHUNK_Z_SHIFT = 4;
+    public enum ChunkState : byte
+    {
+        NeedsMeshUpdate = 0,
+        Good = 1
+    }
+
+    public const int CHUNK_X_SHIFT = 4;
+    public const int CHUNK_Y_SHIFT = 7;
+    public const int CHUNK_Z_SHIFT = 4;
     public const int CHUNK_SIZE_X = 1 << CHUNK_X_SHIFT;
     public const int CHUNK_SIZE_Y = 1 << CHUNK_Y_SHIFT;
     public const int CHUNK_SIZE_Z = 1 << CHUNK_Z_SHIFT;
+
+    public const int CHUNK_SIZE_X_MINUS_ONE = CHUNK_SIZE_X - 1;
+    public const int CHUNK_SIZE_Y_MINUS_ONE = CHUNK_SIZE_Y - 1;
+    public const int CHUNK_SIZE_Z_MINUS_ONE = CHUNK_SIZE_Z - 1;
+
+    public Mesh chunkMesh;
+    public ChunkState chunkState;
 
     short[] cellData = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 

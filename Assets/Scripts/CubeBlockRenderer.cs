@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CubeBlockRenderer : IBlockRenderer
 {
-    public void GenerateTerrainVertices(int x, int y, int z, Chunk chunk, ChunkMesh mesh)
+    public void GenerateTerrainVertices(int x, int y, int z, TerrainManager terrain, ChunkMesh mesh)
     {
-        mesh.CubeBlock(x, y, z, chunk);
+        mesh.CubeBlock(x, y, z, terrain);
     }
 }

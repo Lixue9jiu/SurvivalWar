@@ -34,49 +34,49 @@ public class ChunkMesh
         triangles.Add(count + 3);
     }
 
-    public void CubeBlock(int x, int y, int z, Chunk c)
+    public void CubeBlock(int x, int y, int z, TerrainManager terrain)
     {
-        if (x == 0 || x == Chunk.CHUNK_SIZE_X - 1 ||
-            y == 0 || y == Chunk.CHUNK_SIZE_Y - 1 ||
-            z == 0 || z == Chunk.CHUNK_SIZE_Z - 1)
-            return;
-        
-        if (BlockManager.blocks[c[x + 1, y, z]].isTransparent)
+        Chunk c11 = terrain.ChunkWithBlock(x, y, z);
+        Chunk c21 = terrain.ChunkWithBlock(x + 1, y, z);
+        Chunk c01 = terrain.ChunkWithBlock(x - 1, y, z);
+        Chunk c12 = terrain.ChunkWithBlock(x, y, z + 1);
+        Chunk c10 = terrain.ChunkWithBlock(x, y, z - 1);
+        if (BlockManager.blocks[c21[x + 1, y, z]].isTransparent)
         {
             Quad(new Vector3(x + 1, y + 1, z),
                  new Vector3(x + 1, y + 1, z + 1),
                  new Vector3(x + 1, y, z + 1),
                  new Vector3(x + 1, y, z));
         }
-        if (BlockManager.blocks[c[x - 1, y, z]].isTransparent)
+        if (BlockManager.blocks[c01[x - 1, y, z]].isTransparent)
         {
             Quad(new Vector3(x, y + 1, z + 1),
                  new Vector3(x, y + 1, z),
                  new Vector3(x, y, z),
                  new Vector3(x, y, z + 1));
         }
-        if (BlockManager.blocks[c[x, y, z + 1]].isTransparent)
+        if (BlockManager.blocks[c12[x, y, z + 1]].isTransparent)
         {
             Quad(new Vector3(x + 1, y + 1, z + 1),
                  new Vector3(x, y + 1, z + 1),
                  new Vector3(x, y, z + 1),
                  new Vector3(x + 1, y, z + 1));
         }
-        if (BlockManager.blocks[c[x, y, z - 1]].isTransparent)
+        if (BlockManager.blocks[c10[x, y, z - 1]].isTransparent)
         {
             Quad(new Vector3(x, y + 1, z),
                  new Vector3(x + 1, y + 1, z),
                  new Vector3(x + 1, y, z),
                  new Vector3(x, y, z));
         }
-        if (BlockManager.blocks[c[x, y + 1, z]].isTransparent)
+        if (BlockManager.blocks[c11[x, y + 1, z]].isTransparent)
         {
             Quad(new Vector3(x, y + 1, z),
                  new Vector3(x, y + 1, z + 1),
                  new Vector3(x + 1, y + 1, z + 1),
                  new Vector3(x + 1, y + 1, z));
         }
-        if (BlockManager.blocks[c[x, y - 1, z]].isTransparent)
+        if (BlockManager.blocks[c11[x, y - 1, z]].isTransparent)
         {
             Quad(new Vector3(x, y, z),
                  new Vector3(x + 1, y, z),
