@@ -41,47 +41,49 @@ public class ChunkMesh
         Chunk c01 = terrain.ChunkWithBlock(x - 1, y, z);
         Chunk c12 = terrain.ChunkWithBlock(x, y, z + 1);
         Chunk c10 = terrain.ChunkWithBlock(x, y, z - 1);
-        if (BlockManager.blocks[c21[x + 1, y, z]].isTransparent)
+        int x2 = x & Chunk.SIZE_X_MINUS_ONE;
+        int z2 = z & Chunk.SIZE_Z_MINUS_ONE;
+        if (BlockManager.blocks[c21[(x + 1) & Chunk.SIZE_X_MINUS_ONE, y, z2]].isTransparent)
         {
-            Quad(new Vector3(x + 1, y + 1, z),
-                 new Vector3(x + 1, y + 1, z + 1),
-                 new Vector3(x + 1, y, z + 1),
-                 new Vector3(x + 1, y, z));
+            Quad(new Vector3(x2 + 1, y + 1, z2),
+                 new Vector3(x2 + 1, y + 1, z2 + 1),
+                 new Vector3(x2 + 1, y, z2 + 1),
+                 new Vector3(x2 + 1, y, z2));
         }
-        if (BlockManager.blocks[c01[x - 1, y, z]].isTransparent)
+        if (BlockManager.blocks[c01[(x - 1) & Chunk.SIZE_X_MINUS_ONE, y, z2]].isTransparent)
         {
-            Quad(new Vector3(x, y + 1, z + 1),
-                 new Vector3(x, y + 1, z),
-                 new Vector3(x, y, z),
-                 new Vector3(x, y, z + 1));
+            Quad(new Vector3(x2, y + 1, z2 + 1),
+                 new Vector3(x2, y + 1, z2),
+                 new Vector3(x2, y, z2),
+                 new Vector3(x2, y, z2 + 1));
         }
-        if (BlockManager.blocks[c12[x, y, z + 1]].isTransparent)
+        if (BlockManager.blocks[c12[x2, y, (z + 1) & Chunk.SIZE_Z_MINUS_ONE]].isTransparent)
         {
-            Quad(new Vector3(x + 1, y + 1, z + 1),
-                 new Vector3(x, y + 1, z + 1),
-                 new Vector3(x, y, z + 1),
-                 new Vector3(x + 1, y, z + 1));
+            Quad(new Vector3(x2 + 1, y + 1, z2 + 1),
+                 new Vector3(x2, y + 1, z2 + 1),
+                 new Vector3(x2, y, z2 + 1),
+                 new Vector3(x2 + 1, y, z2 + 1));
         }
-        if (BlockManager.blocks[c10[x, y, z - 1]].isTransparent)
+        if (BlockManager.blocks[c10[x2, y, (z - 1) & Chunk.SIZE_Z_MINUS_ONE]].isTransparent)
         {
-            Quad(new Vector3(x, y + 1, z),
-                 new Vector3(x + 1, y + 1, z),
-                 new Vector3(x + 1, y, z),
-                 new Vector3(x, y, z));
+            Quad(new Vector3(x2, y + 1, z2),
+                 new Vector3(x2 + 1, y + 1, z2),
+                 new Vector3(x2 + 1, y, z2),
+                 new Vector3(x2, y, z2));
         }
-        if (BlockManager.blocks[c11[x, y + 1, z]].isTransparent)
+        if (BlockManager.blocks[c11[x2, y + 1, z2]].isTransparent)
         {
-            Quad(new Vector3(x, y + 1, z),
-                 new Vector3(x, y + 1, z + 1),
-                 new Vector3(x + 1, y + 1, z + 1),
-                 new Vector3(x + 1, y + 1, z));
+            Quad(new Vector3(x2, y + 1, z2),
+                 new Vector3(x2, y + 1, z2 + 1),
+                 new Vector3(x2 + 1, y + 1, z2 + 1),
+                 new Vector3(x2 + 1, y + 1, z2));
         }
-        if (BlockManager.blocks[c11[x, y - 1, z]].isTransparent)
+        if (BlockManager.blocks[c11[x2, y - 1, z2]].isTransparent)
         {
-            Quad(new Vector3(x, y, z),
-                 new Vector3(x + 1, y, z),
-                 new Vector3(x + 1, y, z + 1),
-                 new Vector3(x, y, z + 1));
+            Quad(new Vector3(x2, y, z2),
+                 new Vector3(x2 + 1, y, z2),
+                 new Vector3(x2 + 1, y, z2 + 1),
+                 new Vector3(x2, y, z2 + 1));
         }
     }
 }

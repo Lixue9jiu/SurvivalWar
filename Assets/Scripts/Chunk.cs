@@ -17,9 +17,9 @@ public class Chunk
     public const int CHUNK_SIZE_Y = 1 << CHUNK_Y_SHIFT;
     public const int CHUNK_SIZE_Z = 1 << CHUNK_Z_SHIFT;
 
-    public const int CHUNK_SIZE_X_MINUS_ONE = CHUNK_SIZE_X - 1;
+    public const int SIZE_X_MINUS_ONE = CHUNK_SIZE_X - 1;
     public const int CHUNK_SIZE_Y_MINUS_ONE = CHUNK_SIZE_Y - 1;
-    public const int CHUNK_SIZE_Z_MINUS_ONE = CHUNK_SIZE_Z - 1;
+    public const int SIZE_Z_MINUS_ONE = CHUNK_SIZE_Z - 1;
 
     public Mesh chunkMesh;
     public ChunkState chunkState;

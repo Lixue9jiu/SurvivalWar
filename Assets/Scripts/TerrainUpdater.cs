@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Diagnostics;
+using Stopwatch = System.Diagnostics.Stopwatch;
 
 public class TerrainUpdater : MonoBehaviour
 {
@@ -14,14 +14,20 @@ public class TerrainUpdater : MonoBehaviour
             {
                 for (int y = 0; y < 128; y++)
                 {
-                    if ((x + y + z) % 2 == 0)
+                    if (y < Mathf.PerlinNoise((float)x / 16f, (float)z / 16f) * 128)
+                    {
                         c[x, y, z] = 1;
+                    }
                 }
             }
         }
 
         TerrainManager t = GetComponent<TerrainManager>();
         t.SetChunk(0, 0, c);
+        t.SetChunk(0, 1, c);
+        t.SetChunk(1, 0, c);
+        t.SetChunk(0, -1, c);
+        t.SetChunk(-1, 0, c);
 
         int chunkx = 0;
         int chunkz = 0;
@@ -43,14 +49,15 @@ public class TerrainUpdater : MonoBehaviour
                 switch (x)
                 {
                     case 0:
-                        if (c01 == null || z == 0 && c00 == null || z == Chunk.CHUNK_SIZE_Z_MINUS_ONE && c02 == null) continue;
+                        if (c01 == null || z == 0 && c00 == null || z == Chunk.SIZE_Z_MINUS_ONE && c02 == null) continue;
                         goto default;
-                    case Chunk.CHUNK_SIZE_X_MINUS_ONE:
-                        if (c21 == null || z == 0 && c20 == null || z == Chunk.CHUNK_SIZE_Z_MINUS_ONE && c22 == null) continue;
+                    case Chunk.SIZE_X_MINUS_ONE:
+                        if (c21 == null || z == 0 && c20 == null || z == Chunk.SIZE_Z_MINUS_ONE && c22 == null) continue;
                         goto default;
                     default:
-                        if (z == 0 && c10 == null || z == Chunk.CHUNK_SIZE_Z_MINUS_ONE && c12 == null) continue;
+                        if (z == 0 && c10 == null || z == Chunk.SIZE_Z_MINUS_ONE && c12 == null) continue;
 
+                        // if (x == 0) Debug.Log("0");
                         for (int y = 0; y < 128; y++)
                         {
                             Block b = BlockManager.blocks[c[x, y, z]];
