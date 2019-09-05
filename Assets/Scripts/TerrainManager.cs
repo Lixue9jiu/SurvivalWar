@@ -13,7 +13,7 @@ public class TerrainManager : MonoBehaviour
         {
             return chunks[new Vector2Int(x, z)];
         }
-        Debug.Log($"chunk {x}, {z} not exist");
+        // Debug.Log($"chunk {x}, {z} not exist");
         return null;
     }
 
