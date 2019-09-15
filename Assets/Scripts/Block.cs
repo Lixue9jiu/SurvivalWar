@@ -8,4 +8,6 @@ public class Block
     public bool isTransparent;
     // 方块用的Renderer
     public IBlockRenderer blockRenderer;
+    // 方块的碰撞箱
+    public Bounds[] boundingBoxes;
 }
