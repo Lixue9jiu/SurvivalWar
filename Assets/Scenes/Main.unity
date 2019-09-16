@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f02c49bfae93d42f49496c7b0314a84a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blocksConfig: {fileID: 4900000, guid: 166b7bbd3c1d84e2c9e6a4bbffc6539b, type: 3}
 --- !u!4 &113552238
 Transform:
   m_ObjectHideFlags: 0
@@ -406,6 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0af2fe03665ee43b4b0fc034f4202bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 1
 --- !u!4 &926236744
 Transform:
   m_ObjectHideFlags: 0

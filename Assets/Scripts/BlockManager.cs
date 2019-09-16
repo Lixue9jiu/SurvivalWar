@@ -7,14 +7,22 @@ public class BlockManager : MonoBehaviour
     public static BlockManager instance;
     public static Block[] blocks {get; private set;}
 
+    public TextAsset blocksConfig;
+
     private void Awake() {
-        blocks = new Block[] {
-            new Block{isTransparent = true},
-            new Block{isTransparent = false, blockRenderer = new CubeBlockRenderer()}
-        };
         if (instance != null)
             Destroy(this);
         else
             instance = this;
+        
+        LoadBlocks(blocksConfig.text);
+        Debug.Log(blocks[0]);
+    }
+
+    private void LoadBlocks(string str)
+    {
+        var modLoader = new JsonModLoader();
+        modLoader.Load(str);
+        blocks = modLoader.GetBlocks();
     }
 }
