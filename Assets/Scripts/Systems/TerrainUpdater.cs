@@ -43,7 +43,7 @@ public class TerrainUpdater : MonoBehaviour
 
     private IEnumerator DelayTest()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(1);
 
         var m = GetComponent<TaskManager>();
         for (int x = 0; x < 4; x++)
