@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class Mod
 {
+    public string path;
+    public string blockTextureDirectory;
     public Block[] blocks;
 }

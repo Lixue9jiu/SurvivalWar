@@ -15,11 +15,17 @@ public static class JsonDeserializer
         SetDeserializer<float>((obj) => (float)obj);
         SetDeserializer<double>((obj) => (double)obj);
         SetDeserializer<string>((obj) => (string)obj);
+        SetDeserializer<JsonData>((obj) => obj);
     }
 
     public static T Deserialize<T>(string json)
     {
-        return (T) DeserializeAll(typeof(T), JsonMapper.ToObject(json));
+        return Deserialize<T>(JsonMapper.ToObject(json));
+    }
+
+    public static T Deserialize<T>(JsonData json)
+    {
+        return (T) Deserialize(typeof(T), json);
     }
 
     public static void SetDeserializer<T>(Func<JsonData, object> func)
@@ -27,7 +33,7 @@ public static class JsonDeserializer
         m_deserializers[typeof(T)] = func;
     }
 
-    static object DeserializeAll(Type type, JsonData data)
+    public static object Deserialize(Type type, JsonData data)
     {
         if (m_deserializers.ContainsKey(type))
         {
@@ -38,7 +44,7 @@ public static class JsonDeserializer
             var array = (Array)Activator.CreateInstance(type, new object[]{ data.Count });
             for (int i = 0; i < data.Count; i++)
             {
-                array.SetValue(DeserializeAll(type.GetElementType(), data[i]), i);
+                array.SetValue(Deserialize(type.GetElementType(), data[i]), i);
             }
             return array;
         }
@@ -55,7 +61,7 @@ public static class JsonDeserializer
             var f = type.GetField(key);
             if (f != null)
             {
-                f.SetValue(obj, DeserializeAll(f.FieldType, map[key]));
+                f.SetValue(obj, Deserialize(f.FieldType, map[key]));
             }
         }
         return obj;

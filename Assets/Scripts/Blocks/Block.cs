@@ -9,12 +9,12 @@ public class Block
     // 方块是否透光
     public bool isTransparent;
     // 方块用的Renderer
-    public IBlockRenderer blockRenderer;
+    public IBlockRenderer renderer;
     // 方块的碰撞箱
     public Bounds[] boundingBoxes;
 
     public override string ToString()
     {
-        return name + " : " + blockRenderer;
+        return name + " : " + renderer;
     }
 }

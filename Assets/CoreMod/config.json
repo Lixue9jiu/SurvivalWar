@@ -1,0 +1,64 @@
+{
+    "blockTextureDirectory" : "blocks",
+    "blocks" : 
+    [
+        {
+            "name" : "Air",
+            "isTransparent" : true,
+            "renderer" : null,
+            "boundingBoxes" : ["0.5 0.5 0.5 1 1 1"]
+        },
+        {
+            "name" : "Bedrock",
+            "isTransparent" : false,
+            "renderer" : 
+            {
+                "name" : "CubeBlockRenderer",
+                "data" :
+                {
+                    "texture" : "Bedrock"
+                }
+            },
+            "boundingBoxes" : ["0.5 0.5 0.5 1 1 1"]
+        },
+        {
+            "name" : "Dirt",
+            "isTransparent" : false,
+            "renderer" : 
+            {
+                "name" : "CubeBlockRenderer",
+                "data" :
+                {
+                    "texture" : "Dirt"
+                }
+            },
+            "boundingBoxes" : ["0.5 0.5 0.5 1 1 1"]
+        },
+        {
+            "name" : "Grass",
+            "isTransparent" : false,
+            "renderer" : 
+            {
+                "name" : "CubeBlockRenderer",
+                "data" :
+                {
+                    "textures" : ["GrassSide", "Grass", "GrassSide", "GrassSide", "Dirt", "GrassSide"]
+                }
+            },
+            "boundingBoxes" : ["0.5 0.5 0.5 1 1 1"]
+        },
+        {
+            "name" : "Stone",
+            "isTransparent" : false,
+            "renderer" : 
+            {
+                "name" : "CubeBlockRenderer",
+                "data" :
+                {
+                    "texture" : "Stone"
+                }
+            },
+            "boundingBoxes" : ["0.5 0.5 0.5 1 1 1"]
+        }
+    ]
+}

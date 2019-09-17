@@ -8,10 +8,12 @@ public class TerrainUpdater : MonoBehaviour
     class ChunkInstance
     {
         public Matrix4x4 transform;
-        public Mesh mesh;
+        public Mesh opaque;
+        public Mesh alpha;
     }
 
-    public Material material;
+    public Material opaqueMaterial;
+    public Material alphaMaterial;
 
     TerrainManager terrain;
     TaskManager taskManager;
@@ -25,6 +27,9 @@ public class TerrainUpdater : MonoBehaviour
     }
 
     private void Start() {
+        var tm = GetComponent<BlockTextureManager>();
+        opaqueMaterial.mainTexture = tm.MainTexture;
+        alphaMaterial.mainTexture = tm.MainTexture;
         TerrainGenerator g = new TerrainGenerator();
         for (int x = 0; x < 4; x++)
         {
@@ -80,7 +85,8 @@ public class TerrainUpdater : MonoBehaviour
         dirtyChunks.Clear();
         foreach (var m in toRender)
         {
-            Graphics.DrawMesh(m.mesh, m.transform, material, 0);
+            Graphics.DrawMesh(m.opaque, m.transform, opaqueMaterial, 0);
+            Graphics.DrawMesh(m.alpha, m.transform, alphaMaterial, 0);
         }
     }
 
@@ -125,11 +131,16 @@ public class TerrainUpdater : MonoBehaviour
             var pos = new Vector2Int(chunkx, chunkz);
             if (outputMap.ContainsKey(pos))
             {
-                outputMap[pos].mesh = result.ToMesh();
+                outputMap[pos].opaque = result.opaque.ToMesh();
             }
             else
             {
-                var ci = new ChunkInstance { mesh = result.ToMesh(), transform = Matrix4x4.Translate(new Vector3(chunkx << Chunk.CHUNK_X_SHIFT, 0, chunkz << Chunk.CHUNK_Z_SHIFT)) };
+                var ci = new ChunkInstance
+                {
+                    opaque = result.opaque.ToMesh(),
+                    alpha = result.alpha.ToMesh(),
+                    transform = Matrix4x4.Translate(new Vector3(chunkx << Chunk.CHUNK_X_SHIFT, 0, chunkz << Chunk.CHUNK_Z_SHIFT)),
+                };
                 outputMap[pos] = ci;
                 output.Add(ci);
             }
@@ -149,7 +160,7 @@ public class TerrainUpdater : MonoBehaviour
             Chunk c01 = terrain.GetChunk(chunkx - 1, chunkz);
             Chunk c02 = terrain.GetChunk(chunkx - 1, chunkz + 1);
             ChunkMesh m = new ChunkMesh();
-            var watch = Stopwatch.StartNew();
+            // var watch = Stopwatch.StartNew();
             for (int z = 0; z < 16; z++)
             {
                 for (int x = 0; x < 16; x++)
@@ -169,13 +180,13 @@ public class TerrainUpdater : MonoBehaviour
                             for (int y = 1; y < 127; y++)
                             {
                                 Block b = BlockManager.blocks[c11[x, y, z]];
-                                b.blockRenderer?.GenerateTerrainVertices(x + bx, y, z + bz, terrain, m);
+                                b.renderer?.GenerateTerrainVertices(x + bx, y, z + bz, terrain, m);
                             }
                             break;
                     }
                 }
             }
-            watch.Stop();
+            // watch.Stop();
             // print(watch.ElapsedMilliseconds);
             return m;
         }

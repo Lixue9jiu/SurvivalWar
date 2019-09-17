@@ -15,7 +15,7 @@ public class TerrainGenerator
                 {
                     if (y < Mathf.PerlinNoise((float)(x + bx) / 16f, (float)(z + bz) / 16f) * 16)
                     {
-                        c[x, y, z] = 1;
+                        c[x, y, z] = 2;
                     }
                     //if (y < bx + bz)
                         //c[x, y, z] = 1;
