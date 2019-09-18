@@ -20,6 +20,7 @@ public class TerrainUpdater : MonoBehaviour
     List<ChunkInstance> toRender = new List<ChunkInstance>();
     Dictionary<Vector2Int, ChunkInstance> liveInstances = new Dictionary<Vector2Int, ChunkInstance>();
     List<Vector2Int> dirtyChunks = new List<Vector2Int>(10);
+    Queue<Vector2Int> immediateDirtyChunks = new Queue<Vector2Int>(10);
 
     private void Awake() {
         terrain = GetComponent<TerrainManager>();
@@ -31,9 +32,9 @@ public class TerrainUpdater : MonoBehaviour
         opaqueMaterial.mainTexture = tm.MainTexture;
         alphaMaterial.mainTexture = tm.MainTexture;
         TerrainGenerator g = new TerrainGenerator();
-        for (int x = 0; x < 4; x++)
+        for (int x = 0; x < 16; x++)
         {
-            for (int z = 0; z < 4; z++)
+            for (int z = 0; z < 16; z++)
             {
                 GenerateChunk(x, z, g);
             }
@@ -46,9 +47,9 @@ public class TerrainUpdater : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         var m = GetComponent<TaskManager>();
-        for (int x = 0; x < 4; x++)
+        for (int x = 0; x < 16; x++)
         {
-            for (int z = 0; z < 4; z++)
+            for (int z = 0; z < 16; z++)
             {
                 QueueChunkUpdate(x, z);
             }
@@ -73,6 +74,7 @@ public class TerrainUpdater : MonoBehaviour
     private void Update() {
         foreach (var c in dirtyChunks)
         {
+            if (terrain.GetChunk(c).chunkState == Chunk.ChunkState.Good) continue;
             taskManager.SchaduleTask(new GenerateChunkMeshTask
             {
                 chunkx = c.x,
@@ -83,6 +85,7 @@ public class TerrainUpdater : MonoBehaviour
             });
         }
         dirtyChunks.Clear();
+
         foreach (var m in toRender)
         {
             Graphics.DrawMesh(m.opaque, m.transform, opaqueMaterial, 0);
@@ -104,8 +107,22 @@ public class TerrainUpdater : MonoBehaviour
     public void QueueChunkUpdate(int x, int z)
     {
         // Debug.Log($"queue update: {x}, {z}");
-        if (terrain.GetChunk(x, z) != null)
+        Chunk chunk;
+        if ((chunk = terrain.GetChunk(x, z)) != null)
+        {
+            chunk.chunkState = Chunk.ChunkState.NeedsMeshUpdate;
             dirtyChunks.Add(new Vector2Int(x, z));
+        }
+    }
+
+    public void QueueChunkUpdateImmediate(int x, int z)
+    {
+        Chunk chunk;
+        if ((chunk = terrain.GetChunk(x, z)) != null)
+        {
+            chunk.chunkState = Chunk.ChunkState.NeedsMeshUpdate;
+            immediateDirtyChunks.Enqueue(new Vector2Int(x, z));
+        }
     }
 
     void GenerateChunk(int x, int z, TerrainGenerator g)
@@ -186,6 +203,7 @@ public class TerrainUpdater : MonoBehaviour
                     }
                 }
             }
+            c11.chunkState = Chunk.ChunkState.Good;
             // watch.Stop();
             // print(watch.ElapsedMilliseconds);
             return m;
