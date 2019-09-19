@@ -6,8 +6,9 @@ public class Chunk
 {
     public enum ChunkState : byte
     {
-        NeedsMeshUpdate = 0,
-        Good = 1
+        NeedsMeshUpdate,
+        GeneratingMesh,
+        Good
     }
 
     public const int CHUNK_X_SHIFT = 4;

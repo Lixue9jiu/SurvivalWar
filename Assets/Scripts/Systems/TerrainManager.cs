@@ -60,29 +60,29 @@ public class TerrainManager : MonoBehaviour
         var chunk = GetChunk(chunkx, chunkz);
         if (chunk[blockx, y, blockz] == value) return;
         chunk[blockx, y, blockz] = value;
-        updater.QueueChunkUpdate(chunkx, chunkz);
+        updater.QueueChunkUpdateImmediate(chunkx, chunkz);
         
         switch (blockx)
         {
             case 0:
-                updater.QueueChunkUpdate(chunkx - 1, chunkz);
+                updater.QueueChunkUpdateImmediate(chunkx - 1, chunkz);
                 if (blockz == 0)
-                    updater.QueueChunkUpdate(chunkx - 1, chunkz - 1);
+                    updater.QueueChunkUpdateImmediate(chunkx - 1, chunkz - 1);
                 else if (blockz == 15)
-                    updater.QueueChunkUpdate(chunkx - 1, chunkz + 1);
+                    updater.QueueChunkUpdateImmediate(chunkx - 1, chunkz + 1);
             break;
             case 15:
-                updater.QueueChunkUpdate(chunkx + 1, chunkz);
+                updater.QueueChunkUpdateImmediate(chunkx + 1, chunkz);
                 if (blockz == 0)
-                    updater.QueueChunkUpdate(chunkx + 1, chunkz - 1);
+                    updater.QueueChunkUpdateImmediate(chunkx + 1, chunkz - 1);
                 else if (blockz == 15)
-                    updater.QueueChunkUpdate(chunkx + 1, chunkz + 1);
+                    updater.QueueChunkUpdateImmediate(chunkx + 1, chunkz + 1);
             break;
             default:
                 if (blockz == 0)
-                    updater.QueueChunkUpdate(chunkx, chunkz - 1);
+                    updater.QueueChunkUpdateImmediate(chunkx, chunkz - 1);
                 else if (blockz == 15)
-                    updater.QueueChunkUpdate(chunkx, chunkz + 1);
+                    updater.QueueChunkUpdateImmediate(chunkx, chunkz + 1);
             break;
         }
     }

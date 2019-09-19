@@ -19,8 +19,9 @@ public class TerrainUpdater : MonoBehaviour
     TaskManager taskManager;
     List<ChunkInstance> toRender = new List<ChunkInstance>();
     Dictionary<Vector2Int, ChunkInstance> liveInstances = new Dictionary<Vector2Int, ChunkInstance>();
-    List<Vector2Int> dirtyChunks = new List<Vector2Int>(10);
-    Queue<Vector2Int> immediateDirtyChunks = new Queue<Vector2Int>(10);
+    // List<Vector2Int> dirtyChunks = new List<Vector2Int>(10);
+    LinkedList<Vector2Int> dirtyChunks = new LinkedList<Vector2Int>();
+    // Queue<Vector2Int> immediateDirtyChunks = new Queue<Vector2Int>(10);
 
     private void Awake() {
         terrain = GetComponent<TerrainManager>();
@@ -74,7 +75,8 @@ public class TerrainUpdater : MonoBehaviour
     private void Update() {
         foreach (var c in dirtyChunks)
         {
-            if (terrain.GetChunk(c).chunkState == Chunk.ChunkState.Good) continue;
+            var chunk = terrain.GetChunk(c);
+            if (chunk.chunkState != Chunk.ChunkState.NeedsMeshUpdate) continue;
             taskManager.SchaduleTask(new GenerateChunkMeshTask
             {
                 chunkx = c.x,
@@ -83,6 +85,7 @@ public class TerrainUpdater : MonoBehaviour
                 output = toRender,
                 outputMap = liveInstances
             });
+            chunk.chunkState = Chunk.ChunkState.GeneratingMesh;
         }
         dirtyChunks.Clear();
 
@@ -111,7 +114,7 @@ public class TerrainUpdater : MonoBehaviour
         if ((chunk = terrain.GetChunk(x, z)) != null)
         {
             chunk.chunkState = Chunk.ChunkState.NeedsMeshUpdate;
-            dirtyChunks.Add(new Vector2Int(x, z));
+            dirtyChunks.AddLast(new Vector2Int(x, z));
         }
     }
 
@@ -121,7 +124,7 @@ public class TerrainUpdater : MonoBehaviour
         if ((chunk = terrain.GetChunk(x, z)) != null)
         {
             chunk.chunkState = Chunk.ChunkState.NeedsMeshUpdate;
-            immediateDirtyChunks.Enqueue(new Vector2Int(x, z));
+            dirtyChunks.AddFirst(new Vector2Int(x, z));
         }
     }
 
@@ -146,6 +149,7 @@ public class TerrainUpdater : MonoBehaviour
         public void CallBack()
         {
             var pos = new Vector2Int(chunkx, chunkz);
+            terrain.GetChunk(pos).chunkState = Chunk.ChunkState.Good;
             if (outputMap.ContainsKey(pos))
             {
                 outputMap[pos].opaque = result.opaque.ToMesh();
@@ -203,7 +207,6 @@ public class TerrainUpdater : MonoBehaviour
                     }
                 }
             }
-            c11.chunkState = Chunk.ChunkState.Good;
             // watch.Stop();
             // print(watch.ElapsedMilliseconds);
             return m;
