@@ -132,7 +132,7 @@ public class TerrainUpdater : MonoBehaviour
         {
             var pos = new Vector2Int(chunkx, chunkz);
             terrain.GetChunk(pos).chunkState = Chunk.ChunkState.Good;
-            terrainInstance.UpdateChunk(pos, result.GetMesh());
+            terrainInstance.UpdateChunk(pos, result.opaque.ToMesh(), result.alpha.ToMesh());
         }
 
         ChunkMesh GenerateTerrainMesh()

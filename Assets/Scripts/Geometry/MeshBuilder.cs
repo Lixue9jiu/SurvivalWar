@@ -5,8 +5,7 @@ using UnityEngine;
 public class MeshBuilder
 {
     List<Vector3> vertices = new List<Vector3>();
-    List<int> trianglesOpaque = new List<int>();
-    List<int> trianglesAlphaTest = new List<int>();
+    List<int> triangles = new List<int>();
     List<Vector2> uvs = new List<Vector2>();
     List<Color> colors = new List<Color>();
 
@@ -16,10 +15,8 @@ public class MeshBuilder
     {
         Mesh m = new Mesh();
         m.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-        m.subMeshCount = 2;
         m.vertices = vertices.ToArray();
-        m.SetTriangles(trianglesOpaque.ToArray(), 0);
-        m.SetTriangles(trianglesAlphaTest.ToArray(), 1);
+        m.triangles = triangles.ToArray();
         m.uv = uvs.ToArray();
         m.colors = colors.ToArray();
         m.RecalculateNormals();
@@ -35,24 +32,12 @@ public class MeshBuilder
         vertices.Add(c);
         vertices.Add(d);
 
-        if (useAlphaTest)
-        {
-            trianglesAlphaTest.Add(count);
-            trianglesAlphaTest.Add(count + 1);
-            trianglesAlphaTest.Add(count + 3);
-            trianglesAlphaTest.Add(count + 1);
-            trianglesAlphaTest.Add(count + 2);
-            trianglesAlphaTest.Add(count + 3);
-        }
-        else
-        {
-            trianglesOpaque.Add(count);
-            trianglesOpaque.Add(count + 1);
-            trianglesOpaque.Add(count + 3);
-            trianglesOpaque.Add(count + 1);
-            trianglesOpaque.Add(count + 2);
-            trianglesOpaque.Add(count + 3);
-        }
+        triangles.Add(count);
+        triangles.Add(count + 1);
+        triangles.Add(count + 3);
+        triangles.Add(count + 1);
+        triangles.Add(count + 2);
+        triangles.Add(count + 3);
     }
 
     public void TexQuad(Rect tex)
