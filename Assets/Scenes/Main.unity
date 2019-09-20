@@ -542,8 +542,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opaqueMaterial: {fileID: 2100000, guid: e841739ceac464702ae4829e708da738, type: 2}
   alphaMaterial: {fileID: 2100000, guid: 36c76d94f8c224ae7b965f57a614a109, type: 2}
-  chunkPrefab: {fileID: 5026778964111304780, guid: 42adafd8347ee447fa0e748f2139206d,
+  chunkPrefab: {fileID: 1539932147753989959, guid: b3d26f8f224c74784835bbac5add2e0a,
     type: 3}
+  enableStaticBatching: 1
 --- !u!1 &1762233340
 GameObject:
   m_ObjectHideFlags: 0

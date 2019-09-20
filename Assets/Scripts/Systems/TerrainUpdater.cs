@@ -5,17 +5,9 @@ using Stopwatch = System.Diagnostics.Stopwatch;
 
 public class TerrainUpdater : MonoBehaviour
 {
-    class ChunkInstance
-    {
-        public Matrix4x4 transform;
-        public Mesh opaque;
-        public Mesh alpha;
-    }
-
     public TerrainInstance terrainInstance;
     TerrainManager terrain;
     TaskManager taskManager;
-    Dictionary<Vector2Int, ChunkInstance> liveInstances = new Dictionary<Vector2Int, ChunkInstance>();
     // List<Vector2Int> dirtyChunks = new List<Vector2Int>(10);
     LinkedList<Vector2Int> dirtyChunks = new LinkedList<Vector2Int>();
     // Queue<Vector2Int> immediateDirtyChunks = new Queue<Vector2Int>(10);
@@ -140,7 +132,7 @@ public class TerrainUpdater : MonoBehaviour
         {
             var pos = new Vector2Int(chunkx, chunkz);
             terrain.GetChunk(pos).chunkState = Chunk.ChunkState.Good;
-            terrainInstance.UpdateChunk(pos, result.opaque.ToMesh(), result.alpha.ToMesh());
+            terrainInstance.UpdateChunk(pos, result.GetMesh());
         }
 
         ChunkMesh GenerateTerrainMesh()

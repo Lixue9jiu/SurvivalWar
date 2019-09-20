@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public KeyCode speedUpButton = KeyCode.LeftShift;
     public GameObject blockFrame;
     public float maxYRotation = 80;
-    public float minYRotation = 10;
+    public float minYRotation = -80;
     float Yrotation;
 
     Camera mainCam;
