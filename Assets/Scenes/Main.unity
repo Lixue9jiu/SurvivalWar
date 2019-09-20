@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -51,8 +51,8 @@ LightmapSettings:
     m_IndirectOutputScale: 1
     m_AlbedoBoost: 1
     m_EnvironmentLightingMode: 0
-    m_EnableBakedLightmaps: 1
-    m_EnableRealtimeLightmaps: 1
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
     serializedVersion: 12
     m_Resolution: 2
@@ -464,7 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeBlock: 2
   movementSpeed: 10
-  mouseSensitivity: 200
+  mouseSensitivity: 100
   speedUpButton: 304
   blockFrame: {fileID: 1906045142}
   maxYRotation: 80
@@ -497,6 +497,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 926236743}
+--- !u!1 &1335654509
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1335654510}
+  - component: {fileID: 1335654511}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &1335654510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335654509}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1335654511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335654509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede2ed649032b4b78b261e3d79c53d10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opaqueMaterial: {fileID: 2100000, guid: e841739ceac464702ae4829e708da738, type: 2}
+  alphaMaterial: {fileID: 2100000, guid: 36c76d94f8c224ae7b965f57a614a109, type: 2}
+  chunkPrefab: {fileID: 5026778964111304780, guid: 42adafd8347ee447fa0e748f2139206d,
+    type: 3}
 --- !u!1 &1762233340
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,8 +767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f7e449bd63e4433b68af6a35ead221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  opaqueMaterial: {fileID: 2100000, guid: 36c76d94f8c224ae7b965f57a614a109, type: 2}
-  alphaMaterial: {fileID: 2100000, guid: e841739ceac464702ae4829e708da738, type: 2}
+  terrainInstance: {fileID: 1335654511}
 --- !u!114 &1837784268
 MonoBehaviour:
   m_ObjectHideFlags: 0

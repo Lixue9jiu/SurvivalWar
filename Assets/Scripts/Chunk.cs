@@ -25,9 +25,9 @@ public class Chunk
     public Mesh chunkMesh;
     public ChunkState chunkState;
 
-    short[] cellData = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    BlockData[] cellData = new BlockData[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
-    public short this[int x, int y, int z]
+    public BlockData this[int x, int y, int z]
     {
         get
         {
@@ -38,7 +38,7 @@ public class Chunk
             cellData[GetIndex(x, y, z)] = value;
         }
     }
-    public short this[int index]
+    public BlockData this[int index]
     {
         get
         {

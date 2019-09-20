@@ -31,12 +31,12 @@ public class TerrainManager : MonoBehaviour
         chunks[new Vector2Int(x, z)] = chunk;
     }
 
-    public short GetCell(Vector3Int pos)
+    public BlockData GetCell(Vector3Int pos)
     {
         return GetCell(pos.x, pos.y, pos.z);
     }
 
-    public short GetCell(int x, int y, int z)
+    public BlockData GetCell(int x, int y, int z)
     {
         var pos = new Vector2Int(x >> Chunk.CHUNK_X_SHIFT, z >> Chunk.CHUNK_Z_SHIFT);
         if (chunks.ContainsKey(pos))
@@ -58,7 +58,7 @@ public class TerrainManager : MonoBehaviour
         int blockx = x & 15;
         int blockz = z & 15;
         var chunk = GetChunk(chunkx, chunkz);
-        if (chunk[blockx, y, blockz] == value) return;
+        if (chunk[blockx, y, blockz].value == value) return;
         chunk[blockx, y, blockz] = value;
         updater.QueueChunkUpdateImmediate(chunkx, chunkz);
         

@@ -68,7 +68,7 @@ public class MeshBuilder
         Chunk c10 = terrain.ChunkWithBlock(x, y, z - 1);
         int x2 = x & Chunk.SIZE_X_MINUS_ONE;
         int z2 = z & Chunk.SIZE_Z_MINUS_ONE;
-        if (BlockManager.blocks[c21[(x + 1) & Chunk.SIZE_X_MINUS_ONE, y, z2]].isTransparent)
+        if (BlockManager.blocks[c21[(x + 1) & Chunk.SIZE_X_MINUS_ONE, y, z2].index].isTransparent)
         {
             VerticeQuad(new Vector3(x2 + 1, y + 1, z2),
                  new Vector3(x2 + 1, y + 1, z2 + 1),
@@ -76,7 +76,7 @@ public class MeshBuilder
                  new Vector3(x2 + 1, y, z2));
             TexQuad(texCoord[CellFace.Left]);
         }
-        if (BlockManager.blocks[c01[(x - 1) & Chunk.SIZE_X_MINUS_ONE, y, z2]].isTransparent)
+        if (BlockManager.blocks[c01[(x - 1) & Chunk.SIZE_X_MINUS_ONE, y, z2].index].isTransparent)
         {
             VerticeQuad(new Vector3(x2, y + 1, z2 + 1),
                  new Vector3(x2, y + 1, z2),
@@ -84,7 +84,7 @@ public class MeshBuilder
                  new Vector3(x2, y, z2 + 1));
             TexQuad(texCoord[CellFace.Right]);            
         }
-        if (BlockManager.blocks[c12[x2, y, (z + 1) & Chunk.SIZE_Z_MINUS_ONE]].isTransparent)
+        if (BlockManager.blocks[c12[x2, y, (z + 1) & Chunk.SIZE_Z_MINUS_ONE].index].isTransparent)
         {
             VerticeQuad(new Vector3(x2 + 1, y + 1, z2 + 1),
                  new Vector3(x2, y + 1, z2 + 1),
@@ -92,7 +92,7 @@ public class MeshBuilder
                  new Vector3(x2 + 1, y, z2 + 1));
             TexQuad(texCoord[CellFace.Front]);
         }
-        if (BlockManager.blocks[c10[x2, y, (z - 1) & Chunk.SIZE_Z_MINUS_ONE]].isTransparent)
+        if (BlockManager.blocks[c10[x2, y, (z - 1) & Chunk.SIZE_Z_MINUS_ONE].index].isTransparent)
         {
             VerticeQuad(new Vector3(x2, y + 1, z2),
                  new Vector3(x2 + 1, y + 1, z2),
@@ -100,7 +100,7 @@ public class MeshBuilder
                  new Vector3(x2, y, z2));
             TexQuad(texCoord[CellFace.Back]);
         }
-        if (BlockManager.blocks[c11[x2, y + 1, z2]].isTransparent)
+        if (BlockManager.blocks[c11[x2, y + 1, z2].index].isTransparent)
         {
             VerticeQuad(new Vector3(x2, y + 1, z2),
                  new Vector3(x2, y + 1, z2 + 1),
@@ -108,7 +108,7 @@ public class MeshBuilder
                  new Vector3(x2 + 1, y + 1, z2));
             TexQuad(texCoord[CellFace.Up]);
         }
-        if (BlockManager.blocks[c11[x2, y - 1, z2]].isTransparent)
+        if (BlockManager.blocks[c11[x2, y - 1, z2].index].isTransparent)
         {
             VerticeQuad(new Vector3(x2, y, z2),
                  new Vector3(x2 + 1, y, z2),

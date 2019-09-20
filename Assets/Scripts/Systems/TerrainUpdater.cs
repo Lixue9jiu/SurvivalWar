@@ -12,12 +12,9 @@ public class TerrainUpdater : MonoBehaviour
         public Mesh alpha;
     }
 
-    public Material opaqueMaterial;
-    public Material alphaMaterial;
-
+    public TerrainInstance terrainInstance;
     TerrainManager terrain;
     TaskManager taskManager;
-    List<ChunkInstance> toRender = new List<ChunkInstance>();
     Dictionary<Vector2Int, ChunkInstance> liveInstances = new Dictionary<Vector2Int, ChunkInstance>();
     // List<Vector2Int> dirtyChunks = new List<Vector2Int>(10);
     LinkedList<Vector2Int> dirtyChunks = new LinkedList<Vector2Int>();
@@ -30,8 +27,8 @@ public class TerrainUpdater : MonoBehaviour
 
     private void Start() {
         var tm = GetComponent<BlockTextureManager>();
-        opaqueMaterial.mainTexture = tm.MainTexture;
-        alphaMaterial.mainTexture = tm.MainTexture;
+        terrainInstance.opaqueMaterial.mainTexture = tm.MainTexture;
+        terrainInstance.alphaMaterial.mainTexture = tm.MainTexture;
         TerrainGenerator g = new TerrainGenerator();
         for (int x = 0; x < 16; x++)
         {
@@ -82,18 +79,11 @@ public class TerrainUpdater : MonoBehaviour
                 chunkx = c.x,
                 chunkz = c.y,
                 terrain = terrain,
-                output = toRender,
-                outputMap = liveInstances
+                terrainInstance = terrainInstance
             });
             chunk.chunkState = Chunk.ChunkState.GeneratingMesh;
         }
         dirtyChunks.Clear();
-
-        foreach (var m in toRender)
-        {
-            Graphics.DrawMesh(m.opaque, m.transform, opaqueMaterial, 0);
-            Graphics.DrawMesh(m.alpha, m.transform, alphaMaterial, 0);
-        }
     }
 
     public void QueueChunkNeighborUpdate(int x, int z, int radius)
@@ -137,9 +127,9 @@ public class TerrainUpdater : MonoBehaviour
     {
         public int chunkx, chunkz;
         public TerrainManager terrain;
+        public TerrainInstance terrainInstance;
         public ChunkMesh result;
-        public List<ChunkInstance> output;
-        public Dictionary<Vector2Int, ChunkInstance> outputMap;
+        // public Dictionary<Vector2Int, ChunkInstance> outputMap;
 
         public void Execute()
         {
@@ -150,21 +140,7 @@ public class TerrainUpdater : MonoBehaviour
         {
             var pos = new Vector2Int(chunkx, chunkz);
             terrain.GetChunk(pos).chunkState = Chunk.ChunkState.Good;
-            if (outputMap.ContainsKey(pos))
-            {
-                outputMap[pos].opaque = result.opaque.ToMesh();
-            }
-            else
-            {
-                var ci = new ChunkInstance
-                {
-                    opaque = result.opaque.ToMesh(),
-                    alpha = result.alpha.ToMesh(),
-                    transform = Matrix4x4.Translate(new Vector3(chunkx << Chunk.CHUNK_X_SHIFT, 0, chunkz << Chunk.CHUNK_Z_SHIFT)),
-                };
-                outputMap[pos] = ci;
-                output.Add(ci);
-            }
+            terrainInstance.UpdateChunk(pos, result.opaque.ToMesh(), result.alpha.ToMesh());
         }
 
         ChunkMesh GenerateTerrainMesh()
@@ -200,7 +176,7 @@ public class TerrainUpdater : MonoBehaviour
                             // if (x == 0) Debug.Log("0");
                             for (int y = 1; y < 127; y++)
                             {
-                                Block b = BlockManager.blocks[c11[x, y, z]];
+                                Block b = BlockManager.blocks[c11[x, y, z].index];
                                 b.renderer?.GenerateTerrainVertices(x + bx, y, z + bz, terrain, m);
                             }
                             break;

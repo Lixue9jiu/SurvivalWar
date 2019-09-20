@@ -9,7 +9,7 @@ public class TerrainRaycaster : MonoBehaviour
     public struct RaycastResult
     {
         public Vector3Int point;
-        public int value;
+        public BlockData value;
         public int face;
     }
 
@@ -64,8 +64,8 @@ public class TerrainRaycaster : MonoBehaviour
         int dim = 0;
         while (dist < maxDist)
         {
-            int value = m_terrain.GetCell(map.x, map.y, map.z);
-            if (value != 0)
+            var value = m_terrain.GetCell(map.x, map.y, map.z);
+            if (value.index != 0)
             {
                 return new RaycastResult
                 {

@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
         TerrainRaycaster.RaycastResult? lookingAt = raycaster.LookingAt(mainCam, 10);
         if (lookingAt.HasValue)
         {
-            Block block = BlockManager.blocks[lookingAt.Value.value];
+            Block block = BlockManager.blocks[lookingAt.Value.value.index];
             labelRenderer.AddLabel($"looking at: {lookingAt.Value.point} - {block.name} - {lookingAt.Value.face}");
             blockFrame.GetComponent<BoundsRenderer>().bounds = block.boundingBoxes[0];
             blockFrame.transform.position = lookingAt.Value.point;
