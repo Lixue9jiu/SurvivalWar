@@ -6,7 +6,11 @@ using System;
 
 public class ModManager : MonoBehaviour
 {
-    const string testing_mod_path = "Assets/CoreMod";
+#if UNITY_EDITOR
+    static string testing_mod_path = "Assets/StreamingAssets/CoreMod";
+#else
+    static string testing_mod_path = Application.streamingAssetsPath + "/CoreMod";
+#endif
     static Dictionary<string, Type> m_blockRenderers = new Dictionary<string, Type>();
 
     List<Mod> m_mods = new List<Mod>();
