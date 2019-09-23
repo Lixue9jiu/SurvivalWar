@@ -19,7 +19,7 @@ public class Chunk
     public const int CHUNK_SIZE_Z = 1 << CHUNK_Z_SHIFT;
 
     public const int SIZE_X_MINUS_ONE = CHUNK_SIZE_X - 1;
-    public const int CHUNK_SIZE_Y_MINUS_ONE = CHUNK_SIZE_Y - 1;
+    public const int SIZE_Y_MINUS_ONE = CHUNK_SIZE_Y - 1;
     public const int SIZE_Z_MINUS_ONE = CHUNK_SIZE_Z - 1;
 
     public Mesh chunkMesh;
@@ -31,7 +31,19 @@ public class Chunk
     {
         get
         {
+#if DEBUG
+            try
+            {
+                return cellData[GetIndex(x, y, z)];
+            }
+            catch (System.IndexOutOfRangeException)
+            {
+                Debug.Log($"{x}, {y}, {z}");
+            }
+            return 0;
+#else
             return cellData[GetIndex(x, y, z)];
+#endif
         }
         set
         {

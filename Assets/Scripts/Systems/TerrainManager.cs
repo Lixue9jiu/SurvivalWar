@@ -46,12 +46,12 @@ public class TerrainManager : MonoBehaviour
         return 0;
     }
 
-    public void SetCell(Vector3Int pos, short value)
+    public void SetCell(Vector3Int pos, ushort value)
     {
         SetCell(pos.x, pos.y, pos.z, value);
     }
 
-    public void SetCell(int x, int y, int z, short value)
+    public void SetCell(int x, int y, int z, ushort value)
     {
         int chunkx = x >> Chunk.CHUNK_X_SHIFT;
         int chunkz = z >> Chunk.CHUNK_Z_SHIFT;

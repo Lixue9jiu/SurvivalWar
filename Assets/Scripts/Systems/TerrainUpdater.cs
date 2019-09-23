@@ -22,9 +22,9 @@ public class TerrainUpdater : MonoBehaviour
         terrainInstance.opaqueMaterial.mainTexture = tm.MainTexture;
         terrainInstance.alphaMaterial.mainTexture = tm.MainTexture;
         TerrainGenerator g = new TerrainGenerator();
-        for (int x = 0; x < 16; x++)
+        for (int x = 0; x < 4; x++)
         {
-            for (int z = 0; z < 16; z++)
+            for (int z = 0; z < 4; z++)
             {
                 GenerateChunk(x, z, g);
             }
@@ -37,9 +37,9 @@ public class TerrainUpdater : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         var m = GetComponent<TaskManager>();
-        for (int x = 0; x < 16; x++)
+        for (int x = 0; x < 4; x++)
         {
-            for (int z = 0; z < 16; z++)
+            for (int z = 0; z < 4; z++)
             {
                 QueueChunkUpdate(x, z);
             }
@@ -149,7 +149,7 @@ public class TerrainUpdater : MonoBehaviour
             Chunk c01 = terrain.GetChunk(chunkx - 1, chunkz);
             Chunk c02 = terrain.GetChunk(chunkx - 1, chunkz + 1);
             ChunkMesh m = new ChunkMesh();
-            // var watch = Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
             for (int z = 0; z < 16; z++)
             {
                 for (int x = 0; x < 16; x++)
@@ -175,8 +175,8 @@ public class TerrainUpdater : MonoBehaviour
                     }
                 }
             }
-            // watch.Stop();
-            // print(watch.ElapsedMilliseconds);
+            watch.Stop();
+            print(watch.ElapsedMilliseconds);
             return m;
         }
     }

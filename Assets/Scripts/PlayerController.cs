@@ -2,7 +2,7 @@
 
 public class PlayerController : MonoBehaviour
 {
-    public short activeBlock = 2;
+    public ushort activeBlock = 2;
     public float movementSpeed = 1f;
     public float mouseSensitivity = 3f;
     public KeyCode speedUpButton = KeyCode.LeftShift;

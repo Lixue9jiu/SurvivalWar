@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TerrainGenerator
 {
+    const int TestingBlockLight = 3;
+
     public Chunk GenerateTerrain(int cx, int cz)
     {
         Chunk c = new Chunk();
@@ -16,11 +18,15 @@ public class TerrainGenerator
                     int h = GetTerrainHeight(x + bx, z + bz);
                     if (y < h)
                     {
-                        c[x, y, z] = 2;
+                        c[x, y, z] = BlockData.MakeBlockData(2, TestingBlockLight);
                     }
                     else if (y - 1 < h)
                     {
-                        c[x, y, z] = 3;
+                        c[x, y, z] = BlockData.MakeBlockData(3, TestingBlockLight);
+                    }
+                    else
+                    {
+                        c[x, y, z] = BlockData.MakeBlockData(0, 7);
                     }
                     // if (y < bx + bz)
                     //     c[x, y, z] = 1;
