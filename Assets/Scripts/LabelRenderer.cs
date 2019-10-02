@@ -51,12 +51,6 @@ public class LabelRenderer : MonoBehaviour
     private void Update()
     {
         AddLabel($"FPS: {fps}");
-        foreach (DelayedLabel l in delayedLabelQueue)
-        {
-            delayedLabels.Add(l.conent);
-            StartCoroutine(StartDelayRemove(l.conent, l.time));
-        }
-        delayedLabelQueue.Clear();
     }
 
     private void UpdateFPS()
@@ -79,6 +73,12 @@ public class LabelRenderer : MonoBehaviour
     private void LateUpdate()
     {
         isDirty = true;
+        foreach (DelayedLabel l in delayedLabelQueue)
+        {
+            delayedLabels.Add(l.conent);
+            StartCoroutine(StartDelayRemove(l.conent, l.time));
+        }
+        delayedLabelQueue.Clear();
     }
 
     private IEnumerator StartDelayRemove(string label, float time)

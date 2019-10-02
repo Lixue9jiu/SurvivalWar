@@ -19,12 +19,12 @@ public class TerrainRaycaster : MonoBehaviour
         m_blockManager = GetComponent<BlockManager>();
     }
 
-    public RaycastResult? LookingAt(Camera camera, float maxDist = 20)
+    public RaycastResult? LookingAt(Camera camera, bool ignoreAir, float maxDist = 20)
     {
-        return Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f)), maxDist);
+        return Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f)), ignoreAir, maxDist);
     }
 
-    public RaycastResult? Raycast(Ray ray, float maxDist = 20)
+    public RaycastResult? Raycast(Ray ray, bool ignoreAir, float maxDist = 20)
     {
         Vector3 delta = new Vector3(ray.direction.x == 0 ? int.MaxValue : Mathf.Abs(1 / ray.direction.x), ray.direction.y == 0 ? int.MaxValue : Mathf.Abs(1 / ray.direction.y), ray.direction.z == 0 ? int.MaxValue : Mathf.Abs(1 / ray.direction.z));
         Vector3Int map = Vector3Int.FloorToInt(ray.origin);
@@ -65,7 +65,7 @@ public class TerrainRaycaster : MonoBehaviour
         while (dist < maxDist)
         {
             var value = m_terrain.GetCell(map.x, map.y, map.z);
-            if (value.index != 0)
+            if (!ignoreAir || value.index != 0)
             {
                 return new RaycastResult
                 {

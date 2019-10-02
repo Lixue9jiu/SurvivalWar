@@ -458,8 +458,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Texture: {fileID: 2800000, guid: a01d78712a4bf4d9fb4237c1577c7df1, type: 3}
   m_UVRect:
     serializedVersion: 2
@@ -508,10 +506,10 @@ MonoBehaviour:
   activeBlock: 2
   movementSpeed: 10
   mouseSensitivity: 100
-  speedUpButton: 304
+  speedUpButton: 9
   blockFrame: {fileID: 1906045142}
-  maxYRotation: 80
-  minYRotation: -80
+  maxYRotation: 90
+  minYRotation: -90
 --- !u!4 &926236744
 Transform:
   m_ObjectHideFlags: 0
@@ -705,6 +703,7 @@ GameObject:
   - component: {fileID: 1837784267}
   - component: {fileID: 1837784268}
   - component: {fileID: 1837784269}
+  - component: {fileID: 1837784270}
   m_Layer: 0
   m_Name: GlobalObject
   m_TagString: Untagged
@@ -836,6 +835,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4f4870392834f359b8a5e149330305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1837784270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837784259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c7f44107fe5c4747ae965aa90dd339a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GIColor: {r: 0.6040851, g: 0.65480185, b: 0.7075472, a: 1}
+  SunColor: {r: 1, g: 0.96344423, b: 0.8632076, a: 1}
 --- !u!1 &1906045142
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,31 @@ using UnityEngine;
 
 public class MeshBuilder
 {
+    static float[] shadowMasks;
+    static Color[] GIs;
+
+    static MeshBuilder()
+    {
+        shadowMasks = new float[]
+        {
+            (1f + Vector3.Dot(CellFace.Faces[0], LightSettings.TestGlobalLightDirection)) / 2f,
+            (1f + Vector3.Dot(CellFace.Faces[1], LightSettings.TestGlobalLightDirection)) / 2f,
+            (1f + Vector3.Dot(CellFace.Faces[2], LightSettings.TestGlobalLightDirection)) / 2f,
+            (1f + Vector3.Dot(CellFace.Faces[3], LightSettings.TestGlobalLightDirection)) / 2f,
+            (1f + Vector3.Dot(CellFace.Faces[4], LightSettings.TestGlobalLightDirection)) / 2f,
+            (1f + Vector3.Dot(CellFace.Faces[5], LightSettings.TestGlobalLightDirection)) / 2f
+        };
+        GIs = new Color[]
+        {
+            (shadowMasks[0] > 0.5f ? LightSettings.TestSunColor : LightSettings.TestGIColor) * (1f - shadowMasks[0]),
+            (shadowMasks[1] > 0.5f ? LightSettings.TestSunColor : LightSettings.TestGIColor) * (1f - shadowMasks[1]),
+            (shadowMasks[2] > 0.5f ? LightSettings.TestSunColor : LightSettings.TestGIColor) * (1f - shadowMasks[2]),
+            (shadowMasks[3] > 0.5f ? LightSettings.TestSunColor : LightSettings.TestGIColor) * (1f - shadowMasks[3]),
+            (shadowMasks[4] > 0.5f ? LightSettings.TestSunColor : LightSettings.TestGIColor) * (1f - shadowMasks[4]),
+            (shadowMasks[5] > 0.5f ? LightSettings.TestSunColor : LightSettings.TestGIColor) * (1f - shadowMasks[5])
+        };
+    }
+
     List<Vector3> vertices = new List<Vector3>();
     List<int> triangles = new List<int>();
     List<Vector2> uvs = new List<Vector2>();
@@ -122,6 +147,10 @@ public class MeshBuilder
         // light intencity at a, b, c, d
         float la, lb, lc, ld;
 
+        // sm stands for shadow mask
+        float sm;
+        Color gi;
+
         // cell face: x positive
         if (BlockManager.blocks[c21[(x + 1) & Chunk.SIZE_X_MINUS_ONE, y, z2].index].isTransparent)
         {
@@ -135,11 +164,13 @@ public class MeshBuilder
                  new Vector3(x2 + 1, y, z2),
                  la, lb, lc, ld);
             TexQuad(texCoord[CellFace.Left]);
+            sm = shadowMasks[CellFace.Left];
+            gi = GIs[CellFace.Left];
             ColorQuad(
-                ca * la,
-                cb * lb,
-                cc * lc,
-                cd * ld);
+                (ca * sm + gi) * la,
+                (cb * sm + gi) * lb,
+                (cc * sm + gi) * lc,
+                (cd * sm + gi) * ld);
         }
         // cell face: x negative
         if (BlockManager.blocks[c01[(x - 1) & Chunk.SIZE_X_MINUS_ONE, y, z2].index].isTransparent)
@@ -154,11 +185,13 @@ public class MeshBuilder
                  new Vector3(x2, y, z2 + 1),
                  la, lb, lc, ld);
             TexQuad(texCoord[CellFace.Right]);
+            sm = shadowMasks[CellFace.Right];
+            gi = GIs[CellFace.Right];
             ColorQuad(
-                ca * la,
-                cb * lb,
-                cc * lc,
-                cd * ld);
+                (ca * sm + gi) * la,
+                (cb * sm + gi) * lb,
+                (cc * sm + gi) * lc,
+                (cd * sm + gi) * ld);
         }
         // cell face: z positive
         if (BlockManager.blocks[c12[x2, y, (z + 1) & Chunk.SIZE_Z_MINUS_ONE].index].isTransparent)
@@ -173,11 +206,13 @@ public class MeshBuilder
                  new Vector3(x2 + 1, y, z2 + 1),
                  la, lb, lc, ld);
             TexQuad(texCoord[CellFace.Front]);
+            sm = shadowMasks[CellFace.Front];
+            gi = GIs[CellFace.Front];
             ColorQuad(
-                ca * la,
-                cb * lb,
-                cc * lc,
-                cd * ld);
+                (ca * sm + gi) * la,
+                (cb * sm + gi) * lb,
+                (cc * sm + gi) * lc,
+                (cd * sm + gi) * ld);
         }
         // cell face: z negative
         if (BlockManager.blocks[c10[x2, y, (z - 1) & Chunk.SIZE_Z_MINUS_ONE].index].isTransparent)
@@ -192,11 +227,13 @@ public class MeshBuilder
                  new Vector3(x2, y, z2),
                  la, lb, lc, ld);
             TexQuad(texCoord[CellFace.Back]);
+            sm = shadowMasks[CellFace.Back];
+            gi = GIs[CellFace.Back];
             ColorQuad(
-                ca * la,
-                cb * lb,
-                cc * lc,
-                cd * ld);
+                (ca * sm + gi) * la,
+                (cb * sm + gi) * lb,
+                (cc * sm + gi) * lc,
+                (cd * sm + gi) * ld);
         }
         // cell face: y positive
         if (BlockManager.blocks[c11[x2, y + 1, z2].index].isTransparent)
@@ -211,30 +248,34 @@ public class MeshBuilder
                  new Vector3(x2 + 1, y + 1, z2),
                  la, lb, lc, ld);
             TexQuad(texCoord[CellFace.Up]);
+            sm = shadowMasks[CellFace.Up];
+            gi = GIs[CellFace.Up];
             ColorQuad(
-                ca * la,
-                cb * lb,
-                cc * lc,
-                cd * ld);
+                (ca * sm + gi) * la,
+                (cb * sm + gi) * lb,
+                (cc * sm + gi) * lc,
+                (cd * sm + gi) * ld);
         }
         // cell face: y negative
         if (BlockManager.blocks[c11[x2, y - 1, z2].index].isTransparent)
         {
-            la = CalculateLighting(c01[ClipX(x2 - 1), y - 1, z2].lightF, c02[ClipX(x2 - 1), y - 1, ClipZ(z2 + 1)].lightF, c12[x2, y - 1, ClipZ(z2 + 1)].lightF, c11[x2, y - 1, z2].lightF);
-            lb = CalculateLighting(c00[ClipX(x2 - 1), y - 1, ClipZ(z2 - 1)].lightF, c01[ClipX(x2 - 1), y - 1, z2].lightF, c11[x2, y - 1, z2].lightF, c10[x2, y - 1, ClipZ(z2 - 1)].lightF);
-            lc = CalculateLighting(c10[x2, y - 1, ClipZ(z2 - 1)].lightF, c11[x2, y - 1, z2].lightF, c21[ClipX(x2 + 1), y - 1, z2].lightF, c20[ClipX(x2 + 1), y - 1, ClipZ(z2 - 1)].lightF);
-            ld = CalculateLighting(c11[x2, y - 1, z2].lightF, c12[x2, y - 1, ClipZ(z2 + 1)].lightF, c22[ClipX(x2 + 1), y - 1, ClipZ(z2 + 1)].lightF, c21[ClipX(x2 + 1), y - 1, z2].lightF);
+            ld = CalculateLighting(c01[ClipX(x2 - 1), y - 1, z2].lightF, c02[ClipX(x2 - 1), y - 1, ClipZ(z2 + 1)].lightF, c12[x2, y - 1, ClipZ(z2 + 1)].lightF, c11[x2, y - 1, z2].lightF);
+            la = CalculateLighting(c00[ClipX(x2 - 1), y - 1, ClipZ(z2 - 1)].lightF, c01[ClipX(x2 - 1), y - 1, z2].lightF, c11[x2, y - 1, z2].lightF, c10[x2, y - 1, ClipZ(z2 - 1)].lightF);
+            lb = CalculateLighting(c10[x2, y - 1, ClipZ(z2 - 1)].lightF, c11[x2, y - 1, z2].lightF, c21[ClipX(x2 + 1), y - 1, z2].lightF, c20[ClipX(x2 + 1), y - 1, ClipZ(z2 - 1)].lightF);
+            lc = CalculateLighting(c11[x2, y - 1, z2].lightF, c12[x2, y - 1, ClipZ(z2 + 1)].lightF, c22[ClipX(x2 + 1), y - 1, ClipZ(z2 + 1)].lightF, c21[ClipX(x2 + 1), y - 1, z2].lightF);
             ShadedVerticeQuad(new Vector3(x2, y, z2),
                  new Vector3(x2 + 1, y, z2),
                  new Vector3(x2 + 1, y, z2 + 1),
                  new Vector3(x2, y, z2 + 1),
                  la, lb, lc, ld);
             TexQuad(texCoord[CellFace.Down]);
+            sm = shadowMasks[CellFace.Down];
+            gi = GIs[CellFace.Down];
             ColorQuad(
-                ca * la,
-                cb * lb,
-                cc * lc,
-                cd * ld);
+                (ca * sm + gi) * la,
+                (cb * sm + gi) * lb,
+                (cc * sm + gi) * lc,
+                (cd * sm + gi) * ld);
         }
     }
 

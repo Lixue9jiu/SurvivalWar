@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour
     TerrainRaycaster raycaster;
     LabelRenderer labelRenderer;
 
+    bool cooldownFinished = true;
+
     private void Start() {
         raycaster = GlobalObject.Get<TerrainRaycaster>();
         labelRenderer = GlobalObject.Get<LabelRenderer>();
@@ -26,20 +29,21 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update() {
-        TerrainRaycaster.RaycastResult? lookingAt = raycaster.LookingAt(mainCam, 10);
+        TerrainRaycaster.RaycastResult? lookingAt = raycaster.LookingAt(mainCam, true, 10);
         if (lookingAt.HasValue)
         {
             Block block = BlockManager.blocks[lookingAt.Value.value.index];
-            labelRenderer.AddLabel($"looking at: {lookingAt.Value.point} - {block.name} - {lookingAt.Value.face}");
+            labelRenderer.AddLabel($"looking at: {lookingAt.Value.point} - {block.name} - {lookingAt.Value.value.light} - {lookingAt.Value.face}");
             blockFrame.GetComponent<BoundsRenderer>().bounds = block.boundingBoxes[0];
             blockFrame.transform.position = lookingAt.Value.point;
             blockFrame.SetActive(true);
 
-            if (Input.GetMouseButton(0))
+            if (cooldownFinished && Input.GetMouseButton(0))
             {
                 terrain.SetCell(lookingAt.Value.point, 0);
+                StartCoroutine(StartCooldown(0.3f));
             }
-            else if (Input.GetMouseButton(1))
+            else if (Input.GetMouseButtonDown(1))
             {
                 terrain.SetCell(lookingAt.Value.point + CellFace.Faces[lookingAt.Value.face], activeBlock);
             }
@@ -60,7 +64,9 @@ public class PlayerController : MonoBehaviour
         float right = Input.GetAxisRaw("Horizontal");
         float forward = Input.GetAxisRaw("Vertical");
 
-        transform.position += (right * transform.right + forward * transform.forward) * movementSpeed * dt * (Input.GetKey(speedUpButton) ? 5 : 1);
+        var move = right * transform.right + forward * transform.forward;
+        move.y = Input.GetKey(KeyCode.Space) ? 1 : Input.GetKey(KeyCode.LeftShift) ? -1 : 0;
+        transform.position += move.normalized * movementSpeed * dt * (Input.GetKey(speedUpButton) ? 5 : 1);
     }
 
     private void OnEnable() {
@@ -71,5 +77,12 @@ public class PlayerController : MonoBehaviour
     private void OnDisable() {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    private IEnumerator StartCooldown(float time)
+    {
+        cooldownFinished = false;
+        yield return new WaitForSeconds(time);
+        cooldownFinished = true;
     }
 }

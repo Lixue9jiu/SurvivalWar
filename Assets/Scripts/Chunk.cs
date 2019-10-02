@@ -6,6 +6,8 @@ public class Chunk
 {
     public enum ChunkState : byte
     {
+        InvalidLighting,
+        NeedsLightUpdate,
         NeedsMeshUpdate,
         GeneratingMesh,
         Good
@@ -26,6 +28,7 @@ public class Chunk
     public ChunkState chunkState;
 
     BlockData[] cellData = new BlockData[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    ShiftData[] shiftData = new ShiftData[CHUNK_SIZE_X * CHUNK_SIZE_Z];
 
     public BlockData this[int x, int y, int z]
     {
@@ -61,8 +64,44 @@ public class Chunk
             cellData[index] = value;
         }
     }
+
+    public BlockData GetCellCliped(Vector3Int pos)
+    {
+        return GetCellCliped(pos.x, pos.y, pos.z);
+    }
+
+    public BlockData GetCellCliped(int x, int y, int z)
+    {
+        return this[x & SIZE_X_MINUS_ONE, y & SIZE_Y_MINUS_ONE, z & SIZE_Z_MINUS_ONE];
+    }
+
+    public void SetCellCliped(Vector3Int pos, BlockData data)
+    {
+        SetCellCliped(pos.x, pos.y, pos.z, data);
+    }
+
+    public void SetCellCliped(int x, int y, int z, BlockData data)
+    {
+        this[x & SIZE_X_MINUS_ONE, y & SIZE_Y_MINUS_ONE, z & SIZE_Z_MINUS_ONE] = data;
+    }
+
+    public ShiftData GetShiftData(int x, int z)
+    {
+        return shiftData[GetShiftIndex(x, z)];
+    }
+
+    public void SetShiftData(int x, int z, ShiftData data)
+    {
+        shiftData[GetShiftIndex(x, z)] = data;
+    }
+
     public static int GetIndex(int x, int y, int z)
     {
         return y + (x << CHUNK_Y_SHIFT) + (z << (CHUNK_Y_SHIFT + CHUNK_X_SHIFT));
+    }
+
+    public static int GetShiftIndex(int x, int z)
+    {
+        return x + (z << CHUNK_X_SHIFT);
     }
 }
